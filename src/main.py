@@ -1,5 +1,5 @@
 import pygame
-from grid import Grid
+import grid as Grid
 
 TILES_HORIZONTAL = 10
 TILES_VERTICAL = 10
@@ -12,10 +12,9 @@ screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 clock = pygame.time.Clock()
 running = True
 
-background = pygame.Surface((int(WINDOW_WIDTH / TILES_HORIZONTAL), int(WINDOW_HEIGHT / TILES_VERTICAL)))
-background = background.convert()
-myGrid = Grid(TILES_HORIZONTAL, TILES_VERTICAL, WINDOW_WIDTH, WINDOW_HEIGHT, screen)
-myGrid.render()
+grid = Grid.grid(TILES_HORIZONTAL, TILES_VERTICAL, WINDOW_WIDTH, WINDOW_HEIGHT)
+background = Grid.surface(grid, TILES_HORIZONTAL, TILES_VERTICAL, WINDOW_WIDTH, WINDOW_HEIGHT)
+screen.blit(background, (0, 0))
 
 while running:
     for event in pygame.event.get():
