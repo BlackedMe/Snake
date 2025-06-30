@@ -1,7 +1,7 @@
 import pygame
 from collections import deque
 
-class Snake(pygame.sprite.Group):
+class Snake(pygame.sprite.LayeredDirty):
     def __init__(self, turn_texture, head_texture, body_texture, tail_texture, head_index, grid):
         head = SnakeJoint(head_texture, head_index, grid)
         body = SnakeJoint(body_texture, (head_index[0] - 1, head_index[1]), grid)
@@ -49,6 +49,9 @@ class Snake(pygame.sprite.Group):
             self._tail_texture = pygame.transform.rotate(self._tail_texture, angle)
 
         self.sprites()[0].image = self._tail_texture
+
+        self.sprites()[-2].dirty = 1
+        self.sprites()[0].dirty = 1
     
     def move_forward(self, grid):
         # Move the head forward by one grid
@@ -67,6 +70,10 @@ class Snake(pygame.sprite.Group):
 
         self.sprites()[0].image = self._tail_texture
 
+        # repaint
+        self.sprites()[-2].dirty = 1
+        self.sprites()[0].dirty = 1
+
     def _get_uturn_angle(self, back, front):
         vec2 = back + front
 
@@ -75,7 +82,7 @@ class Snake(pygame.sprite.Group):
 
         return 45 * vec2.x + 225 * vec2.y
         
-class SnakeJoint(pygame.sprite.Sprite):
+class SnakeJoint(pygame.sprite.DirtySprite):
     def __init__(self, image, index, grid):
         super().__init__()
 
