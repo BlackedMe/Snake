@@ -22,12 +22,12 @@ class Snake(pygame.sprite.LayeredDirty):
         self._front = pygame.math.Vector2(1, 0)
 
     # take rightwards as positive
-    def rotate(self, dir, grid):
-        angle = -90 * dir
+    def rotate(self, front, grid):
+        angle = -self._front.angle_to(front) # angle is negated because of pygame's inverted y coordinate system
 
         # Rotate the head and move it forward by one grid
         _back = -self._front
-        self._front = self._front.rotate(-angle) # angle is negated because of pygame's inverted y coordinate system
+        self._front = front
         self._head_index += self._front
 
         self._head_texture = pygame.transform.rotate(self._head_texture, angle)
@@ -81,6 +81,9 @@ class Snake(pygame.sprite.LayeredDirty):
             return -45 * vec2.x - 45 * vec2.y
 
         return 45 * vec2.x + 225 * vec2.y
+
+    def is_horizontal(self):
+        return self._front[1] == 0
         
 class SnakeJoint(pygame.sprite.DirtySprite):
     def __init__(self, image, index, grid):
